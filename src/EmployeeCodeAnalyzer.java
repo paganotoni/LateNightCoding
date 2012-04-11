@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class EmployeeCodeAnalyzer {
@@ -93,33 +95,97 @@ public class EmployeeCodeAnalyzer {
   }
 
   public static void main( String ... args){
-    System.out.println("Digita el numero de empleados:");
-
     Scanner scanner = new Scanner( System.in );
+    System.out.println("Digita el numero de empleados:");
     Integer employeeNumber = scanner.nextInt();
+
     EmployeeCodeAnalyzer analyzer = new EmployeeCodeAnalyzer();
     String[][] results = new String[employeeNumber][6];
 
-    Integer[] areas = new Integer[WORKING_AREAS.length];
-    Integer[] cargos = new Integer[JOB_POSITIONS.length];
-    Integer[] sindicato = new Integer[SINDICATO.length];
-    Integer[] pension = new Integer[PENSION.length];
-    Integer[] salud = new Integer[SALUD.length];
+    //HashMap<String, Integer> areasCount =  new HashMap<String, Integer>();
+    //HashMap<String, Integer> cargosCount =  new HashMap<String, Integer>();
+    //HashMap<String, Integer> sindicatosCount =  new HashMap<String, Integer>();
+    String[] areaCodes = new String[]{ "Gerencia", "Contabilidad", "Almacen", "Compras", "Ventas", "Mantenimiento", "Personal" };
+    Integer[] areaCounts = new Integer[]{ 0, 0, 0, 0, 0, 0, 0};
+
+    String[] positionCodes = new String[]{ "Gerente", "Director", "Subdirector", "Auxiliar", "Representante", "Secretario", "Operador" };
+    Integer[] positionCounts = new Integer[]{ 0, 0, 0, 0, 0, 0, 0};
+
+    String[] sindicatoCodes = new String[]{ "Sindicalizado", "No Sindicalizado" };
+    Integer[] sindicatoCounts = new Integer[]{ 0, 0 };
+
+    String[] pensionCodes = new String[]{ "Porvenir", "Skandia", "City Colfondos", "Proteccion", "ISS", "Ing Pensiones y Cesantias" };
+    Integer[] pensionCounts = new Integer[]{ 0, 0, 0, 0, 0, 0};
+
+    String[] saludCodes = new String[]{ "Famisanar", "Coomeva", "Susalud", "Colsanitas", "Barrios unidos de quibdo", "Sisben" };
+    Integer[] saludCounts = new Integer[]{ 0, 0, 0, 0, 0, 0};
+
+    Object[][] cargos = new Object[JOB_POSITIONS.length][2];
+    //String[][] sindicato = new String[SINDICATO.length][2];
+    //String[][] pension = new String[PENSION.length][2];
+    //String[][] salud = new String[SALUD.length][2];
 
     Integer oldestYear = Integer.MAX_VALUE;
+
 
     for( int i = 0 ; i< employeeNumber ; i++ ){
       System.out.println( "Empleado # "+ (i+1)+" => " );
       String code = scanner.next();
       results[i] = analyzer.analyzeCode( code );
 
+      Integer codeIndex = java.util.Arrays.asList(areaCodes).indexOf(results[i][0]);
+      areaCounts[codeIndex] = areaCounts[codeIndex] + 1;
 
+      Integer positionIndex = java.util.Arrays.asList(positionCodes).indexOf(results[i][1]);
+      positionCounts[positionIndex] = positionCounts[positionIndex] + 1;
+
+      Integer sindicatoIndex = java.util.Arrays.asList(sindicatoCodes).indexOf(results[i][2]);
+      sindicatoCounts[sindicatoIndex] = sindicatoCounts[sindicatoIndex] + 1;
+
+      Integer pensionIndex = java.util.Arrays.asList(pensionCodes).indexOf(results[i][3]);
+      pensionCounts[pensionIndex] = pensionCounts[pensionIndex] + 1;
+
+      Integer saludIndex = java.util.Arrays.asList(saludCodes).indexOf(results[i][4]);
+      saludCounts[saludIndex] = saludCounts[saludIndex] + 1;
 
       Integer employerYear = Integer.valueOf( results[i][5] );
       oldestYear =  employerYear < oldestYear ? employerYear : oldestYear;
+
     }
 
+    System.out.println("\nWorking Areas Stats:");
+    for( int i = 0 ; i < areaCodes.length ; i++ ){
+      System.out.println( WORKING_AREAS[i][1] + ": " + areaCounts[i] + " Employers " );
+    }
 
+    System.out.println("\n");
+    System.out.println("Position Stats:");
+    for( int i = 0 ; i < positionCounts.length ; i++ ){
+      System.out.println( JOB_POSITIONS[i][1] + ": " + positionCounts[i]  +" Employers");
+    }
+    System.out.println("\n");
+    System.out.println("Sindicato Stats:");
+
+    for( int i = 0 ; i < sindicatoCodes.length ; i++ ){
+      System.out.println( SINDICATO[i][1] + " : " + sindicatoCounts[i]  +" Employers");
+    }
+
+    System.out.println("\n");
+    System.out.println("Pension Stats:");
+
+    for( int i = 0 ; i < pensionCodes.length ; i++ ){
+      System.out.println( PENSION[i][1] + " : " + pensionCounts[i]  +" Employers");
+    }
+
+    System.out.println("\n");
+    System.out.println("Salud Stats:");
+
+    for( int i = 0 ; i < saludCodes.length ; i++ ){
+      System.out.println( SALUD[i][1] + " : " + saludCounts[i]  +" Employers");
+    }
+
+    System.out.println("\n");
+    System.out.println( "Oldest contract year: " +oldestYear);
 
   }
 
